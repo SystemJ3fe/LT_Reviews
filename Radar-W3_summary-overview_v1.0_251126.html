@@ -1,0 +1,154 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Radar (Wave 3): summary overview</title><style>:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#1b2230; --muted:#5a6475; --rule:#d8dde6; --accent:#0b5f73; --accent-bg:#e1f0f4;
+  --del-bg:#fde8ea; --del-ink:#6e1620; --add-bg:#e2f4e5; --add-ink:#14502a; --none-bg:#eef0f4; --hunk-bg:#eaf1f4; --eq-ink:#2c3544;
+  --warn-bg:#fff4dd; --warn-rule:#e3c47a; --warn-ink:#8a5a00;
+  --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#12161d; --panel:#1a202a; --ink:#e6eaf1; --muted:#9aa5b8; --rule:#2c3543; --accent:#6cc4d8; --accent-bg:#17323a;
+    --del-bg:#3a1b21; --del-ink:#ffc9cf; --add-bg:#16301f; --add-ink:#bdecc9; --none-bg:#1f2632; --hunk-bg:#1b2a31; --eq-ink:#c8d0de;
+    --warn-bg:#35290f; --warn-rule:#7a6322; --warn-ink:#f0c674; color-scheme: dark; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+main{max-width:1280px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:1.55rem;line-height:1.25;margin:0 0 6px;font-weight:650}
+h2{font-size:1.1rem;margin:34px 0 10px;font-weight:650}
+h3{font-size:1rem;margin:24px 0 8px;font-weight:650}
+p{margin:0 0 10px;max-width:78ch}
+a{color:var(--accent)}
+.sub{color:var(--muted);max-width:78ch}
+.small{font-size:.88rem;color:var(--muted)}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-bg);padding:1px 5px;border-radius:3px}
+.scroll{overflow-x:auto}
+ul.plain{margin:0;padding-left:20px;max-width:100ch} ul.plain li{margin:6px 0}
+ol.plain{margin:0;padding-left:22px;max-width:100ch} ol.plain li{margin:6px 0}
+
+/* header block */
+table.docinfo{border-collapse:collapse;width:100%;max-width:1000px;background:var(--panel);border:1px solid var(--rule);margin:14px 0 8px}
+table.docinfo th{width:150px;text-align:left;vertical-align:top;font-weight:650;color:var(--muted);padding:7px 12px;border-bottom:1px solid var(--rule);background:var(--bg)}
+table.docinfo td{padding:7px 12px;border-bottom:1px solid var(--rule)}
+table.docinfo tr:last-child th,table.docinfo tr:last-child td{border-bottom:0}
+
+/* stat strip, callout, badge */
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0 4px}
+.stat{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:10px 16px;min-width:150px}
+.stat b{display:block;font-size:1.35rem;font-weight:650}
+.stat span{color:var(--muted);font-size:.85rem}
+.note{background:var(--warn-bg);border:1px solid var(--warn-rule);border-radius:6px;padding:10px 14px;margin:18px 0;max-width:100ch}
+.badge{display:inline-block;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:0 7px;margin-right:6px;font-size:.8rem;font-weight:600;white-space:nowrap}
+
+/* register and figures tables */
+table.t{border-collapse:collapse;width:100%;background:var(--panel);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+table.t th{text-align:left;font-weight:600;font-size:.85rem;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--rule);background:var(--bg)}
+table.t td{padding:8px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+table.t tr:last-child td{border-bottom:0}
+table.t td:nth-child(n+3){font-variant-numeric:tabular-nums}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.pf th{text-align:center} table.pf th:first-child{text-align:left}
+tr.tot td{border-top:2px solid var(--rule);background:var(--bg)}
+.gd{color:var(--add-ink);font-weight:650} .nn{color:var(--muted)}
+
+/* diff */
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--rule)}
+.bar button{font:inherit;font-size:.85rem;border:1px solid var(--rule);background:var(--panel);color:var(--ink);padding:5px 12px;border-radius:5px;cursor:pointer}
+.bar button:hover{border-color:var(--accent)}
+.legend span{display:inline-block;padding:1px 8px;border-radius:3px;font-size:.82rem;margin-right:8px}
+.l-del{background:var(--del-bg);color:var(--del-ink)} .l-add{background:var(--add-bg);color:var(--add-ink)}
+table.diff{border-collapse:collapse;width:100%;table-layout:fixed;background:var(--panel);border:1px solid var(--rule);font:12.5px/1.45 var(--mono)}
+table.diff col.cn{width:3.6em}
+td.ln{color:var(--muted);text-align:right;padding:0 8px;user-select:none;vertical-align:top;border-right:1px solid var(--rule);font-size:11.5px}
+td.code{white-space:pre-wrap;overflow-wrap:anywhere;tab-size:4;padding:0 8px;vertical-align:top;color:var(--eq-ink);border-right:1px solid var(--rule)}
+td.code.del{background:var(--del-bg);color:var(--del-ink)} td.code.add{background:var(--add-bg);color:var(--add-ink)} td.code.none{background:var(--none-bg)}
+tr.hunk td{background:var(--hunk-bg);font:600 12.5px var(--sans);padding:6px 10px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+tr.hunk .htext{font-weight:500;margin-right:12px}
+tr.hunk .rng{color:var(--muted);font-weight:400;font-family:var(--mono);font-size:11.5px}
+tr.fold td{background:var(--bg);text-align:center;padding:3px}
+tr.fold button{font:12px var(--sans);color:var(--accent);background:none;border:0;cursor:pointer;padding:2px 8px}
+tr.hid{display:none} tr.hid.open{display:table-row}
+
+/* section spacer: separates sections so the end of one and the start of the next are easy to see */
+p.spacer{margin:0;height:34px;max-width:none;border-bottom:1px solid var(--rule)}
+section.sec{display:block}
+section.sec > h2:first-child{margin-top:22px}
+
+/* performance block on a change header (only when an effect is flagged) */
+.perf{margin-top:7px;font:400 12.5px/1.45 var(--sans)}
+.perf .lead{font-weight:650;margin:0 0 4px;max-width:100ch;font-size:13px}
+.perf .tag{display:inline-block;border:1px dashed var(--muted);color:var(--muted);border-radius:4px;padding:0 6px;font-size:11px;font-weight:500;margin-left:6px}
+table.pt{border-collapse:collapse;font:12px/1.4 var(--sans);margin:2px 0 0}
+table.pt th{font-weight:600;color:var(--muted);text-align:left;padding:2px 18px 2px 0;white-space:nowrap}
+table.pt td{padding:2px 18px 2px 0;white-space:nowrap;font-weight:500}
+.pt .good{color:var(--add-ink);font-weight:650}
+.pt .warn{color:var(--warn-ink);font-weight:650}
+.pt .none{color:var(--muted)}
+
+:root{ --sev-hi-bg:#fbe3e3; --sev-hi-ink:#8a1111; }
+@media (prefers-color-scheme: dark){ :root{ --sev-hi-bg:#3d1515; --sev-hi-ink:#ffb4b4; } }
+
+/* severity and classification badges (text always present) */
+.sev{display:inline-block;border-radius:4px;padding:0 7px;font-size:.8rem;font-weight:650;white-space:nowrap;border:1px solid transparent}
+.sev-hi{background:var(--sev-hi-bg);color:var(--sev-hi-ink);border-color:var(--sev-hi-ink)}
+.sev-med{background:var(--warn-bg);color:var(--warn-ink);border-color:var(--warn-rule)}
+.sev-low{background:var(--none-bg);color:var(--muted);border-color:var(--rule)}
+.cls{display:inline-block;border-radius:4px;padding:0 6px;font-size:.76rem;font-weight:600;white-space:nowrap;border:1px solid var(--rule);color:var(--muted)}
+.cls-ok{color:var(--muted)}
+.cls-warn{background:var(--warn-bg);color:var(--warn-ink);border-color:var(--warn-rule)}
+.cls-issue{color:var(--accent);border-color:var(--accent)}
+.cls-val{border-style:dashed;color:var(--muted)}
+.was{font-size:.78rem;color:var(--muted);display:block}
+
+/* product label used in section headings and registers */
+.prod{display:inline-block;font:600 .78rem var(--mono);border:1px solid var(--rule);border-radius:3px;padding:0 5px;margin-right:6px;color:var(--ink)}
+
+/* feature matrix (rewrite pairs) */
+table.fm{border-collapse:collapse;width:100%;background:var(--panel);border:1px solid var(--rule);font-size:.88rem}
+table.fm th,table.fm td{padding:6px 10px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);vertical-align:top;text-align:left}
+table.fm th{background:var(--bg);color:var(--muted);font-weight:600}
+table.fm td.same{color:var(--muted)}
+table.fm td.diff{background:var(--warn-bg);color:var(--warn-ink)}
+table.fm td.na{color:var(--muted);font-style:italic}
+
+/* register summary line */
+p.regsum{font-weight:600;max-width:100ch}
+</style></head><body><main>
+<h1>Radar (Wave 3): summary overview</h1><p class="sub">Covers the request and response reports. BX (Complete Computers) is the baseline; LB (Complete D&amp;O) is compared against it.</p><p class="small"><a href="#plain">In plain terms</a> · <a href="#reports">Reports</a> · <a href="#patterns">Patterns</a> · <a href="#onesided">One-sided fixes</a> · <a href="#order">Order of work</a> · <a href="#owners">Questions by owner</a> · <a href="#perf">Round 2</a> · <a href="#decisions">Decisions</a></p>
+<table class="docinfo"><tr><th>Document</th><td>Wave 3 Radar: summary overview of the request and response code audits (BX baseline against LB)</td></tr><tr><th>Author</th><td>Jeff Watson — Allianz UK</td></tr><tr><th>Purpose</th><td>One page for decision makers: the overall verdict, the patterns to fix once across both products, the one-sided fixes, the questions by owner and the order of work.</td></tr><tr><th>Audience</th><td>Principal Engineers, Integration, Pricing, Instanda configuration; Jeff (PM)</td></tr><tr><th>Status</th><td>Draft — 25.11.2026. For review; liquid-verify (Mode E) still to run. AI-assisted: review before adopting.</td></tr><tr><th>Version/Date</th><td>v1.0_251126</td></tr></table>
+<div class="stats"><div class="stat"><b>6 templates</b><span>Radar request and response, BX and LB</span></div><div class="stat"><b>38 findings</b><span>BX 25 · LB 13</span></div><div class="stat"><b>8 High</b><span>none Critical or Blocking</span></div><div class="stat"><b>4 one-sided</b><span>fixes present in one template only</span></div><div class="stat"><b>14 questions</b><span>for Pricing, Instanda and Integration</span></div></div><div class="note"><b>Evidence.</b> Code read in full for every template in the Scope table, at the versions listed (all match <code>prep-pack/01-file-index.csv</code>, <code>verify.py</code>: 82 SAME). Behaviour was checked by rendering locally on DotLiquid 2.3.260 (NuGet package, net10.0), Ruby naming, invariant culture, at syntax levels 20 and 22, using real Instanda payloads and labelled synthetic edits; Radar responses were <b>reconstructed</b> from the outputs Instanda stored on the payloads. "Proven (local)" means reproduced on that engine, not on the Logic Apps or Function App host. This engine build differs from the work-system build used for W2a/W2b (commit <code>e1e721a</code>); where results could differ it is stated. Items marked <b>Verify</b> depend on host settings that are not confirmed. AI makes mistakes: review each finding against the code before acting on it.</div><p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="plain"><h2>In plain terms</h2>
+<p><b>In plain terms:</b> the Radar templates for both products work on real data under two unconfirmed host conditions: full whitespace trimming (syntax level 22) and a base64 decode step before rendering. Both conditions should be confirmed with two short host tests before anything else. Beyond that, the BX templates read four attributes that do not exist (amended-excess flags, commission rate, agent, BI months type), so information is silently left out of the BX rating request; LB reads the right attributes for agent and commission rate but has its own dead gate (residents-association flats). Shared defects (no JSON escaping, raw numbers, empty capstones, claim IDs) need one fix each, applied to both products. The response mapping is proven correct by round trip for both products; the BX NB/MTA response still carries the work-area comma defect, and it is unclear whether it is deployed.</p>
+</section>
+<p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="reports"><h2>Reports issued</h2>
+<div class="scroll"><table class="t"><thead><tr><th>Report</th><th>File</th><th>Version</th><th>Findings (BX / LB)</th><th>High</th><th>Drift / one-sided</th></tr></thead><tbody><tr><td>Request</td><td><code>Radar-request_BX-vs-LB_code-audit_v1.0_251126.html</code></td><td>v1.0</td><td>20 / 12</td><td>7</td><td>4 / 3</td></tr><tr><td>Response</td><td><code>Radar-response_BX-vs-LB_code-audit_v1.0_251126.html</code></td><td>v1.0</td><td>8 / 3</td><td>2</td><td>3 / 1</td></tr></tbody></table></div><p class="small">Five findings span request and response and appear in both reports (RAD-BX-01, RAD-BX-21, RAD-BX-25, RAD-LB-05, RAD-LB-13), so the rows add up to 43 for 38 unique findings. Full record: <code>_reference/findings/W3.json</code>. Each report has a <b>Side by side</b> section: one worked example per fix (released lines against the same lines with the fix, proven by render on the case shown), with every other affected site listed beneath it (D23).</p>
+</section>
+<p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="patterns"><h2>Patterns across the wave</h2>
+<div class="scroll"><table class="t"><thead><tr><th>Pattern</th><th>Meaning</th><th>Templates affected</th><th>Finding IDs</th><th>Worst severity</th></tr></thead><tbody><tr><td><code>P-GATE-NOFIELD</code></td><td>A gate or value reads an attribute that no payload carries, so the element is never sent or is always empty.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>response (NB/MTA), <span class="prod">BX</span>renewal request, <span class="prod">BX</span>renewal response, <span class="prod">LB</span>request, <span class="prod">LB</span>response</td><td>RAD-BX-05, RAD-BX-06, RAD-BX-09, RAD-BX-10, RAD-BX-15, RAD-LB-06, RAD-LB-07, RAD-BX-23, RAD-LB-12</td><td><span class="sev sev-med">Medium</span></td></tr><tr><td><code>P-NUM-UNQUOTED</code></td><td>A number is written unquoted with no default; a missing or blank value makes the JSON invalid.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>response (NB/MTA), <span class="prod">BX</span>renewal request, <span class="prod">BX</span>renewal response, <span class="prod">LB</span>request, <span class="prod">LB</span>response</td><td>RAD-BX-07, RAD-BX-18, RAD-LB-04, RAD-LB-05</td><td><span class="sev sev-med">Medium</span></td></tr><tr><td><code>P-MARKER-WS</code></td><td>Trailing-comma removal by marker relies on the engine trimming all whitespace; valid only at syntax level 22 on the local engine.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>response (NB/MTA), <span class="prod">BX</span>renewal request, <span class="prod">BX</span>renewal response, <span class="prod">LB</span>request</td><td>RAD-BX-01, RAD-LB-01</td><td><span class="sev sev-hi">High</span></td></tr><tr><td><code>P-HYGIENE</code></td><td>Headers, hardcoded placeholders, dead code, encoding.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>renewal request, <span class="prod">LB</span>request, <span class="prod">LB</span>response</td><td>RAD-BX-25, RAD-LB-13</td><td><span class="sev sev-low">Low</span></td></tr><tr><td><code>P-B64-DEPEND</code></td><td>The template relies on an undocumented host step that decodes base64 JSON strings.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>renewal request, <span class="prod">LB</span>request</td><td>RAD-BX-02, RAD-LB-03</td><td><span class="sev sev-hi">High</span></td></tr><tr><td><code>P-JSON-ESCAPE</code></td><td>Free text written into JSON with no escaping.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>renewal request, <span class="prod">LB</span>request</td><td>RAD-BX-04, RAD-LB-02</td><td><span class="sev sev-hi">High</span></td></tr><tr><td><code>P-NIL-NE-EMPTY</code></td><td>A missing attribute (nil) passes a != '' test, so empty entries are sent.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>renewal request, <span class="prod">LB</span>request</td><td>RAD-BX-11, RAD-LB-08</td><td><span class="sev sev-med">Medium</span></td></tr><tr><td><code>P-SPEC-AC</code></td><td>Implementation does not meet the hand-over acceptance criteria.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>renewal request, <span class="prod">LB</span>request</td><td>RAD-BX-12, RAD-LB-09</td><td><span class="sev sev-med">Medium</span></td></tr><tr><td><code>P-GATE-WRONGFIELD</code></td><td>A Yes/No gate tests an attribute that exists but holds a different kind of value (an amount), so it never fires.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>renewal request</td><td>RAD-BX-03</td><td><span class="sev sev-hi">High</span></td></tr><tr><td><code>P-CASE-KEY</code></td><td>Lower-case member name (item.key) that DotLiquid does not expose.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>renewal request</td><td>RAD-BX-08</td><td><span class="sev sev-med">Medium</span></td></tr><tr><td><code>P-SIZE-BARE</code></td><td>Bare .size on an optional array (fatal under Logic Apps).</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">LB</span>request</td><td>RAD-BX-14, RAD-LB-10</td><td><span class="sev sev-med">Medium</span></td></tr><tr><td><code>P-MARKER-EMPTY</code></td><td>Trailing-comma marker left in the output when the captured loop has no items.</td><td><span class="prod">BX</span>response (NB/MTA), <span class="prod">BX</span>renewal response</td><td>RAD-BX-19</td><td><span class="sev sev-low">Low</span></td></tr><tr><td><code>P-LIVE-VERSION</code></td><td>Which version is deployed cannot be proven from the files.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>response (NB/MTA)</td><td>RAD-BX-21</td><td><span class="sev sev-low">Low</span></td></tr><tr><td><code>P-BLANK-TRADE</code></td><td>Optional answers skipped only on a literal (n/a), not on blank.</td><td><span class="prod">BX</span>request (NB/MTA), <span class="prod">BX</span>renewal request</td><td>RAD-BX-24</td><td><span class="sev sev-low">Low</span></td></tr><tr><td><code>P-LOOP-SEP</code></td><td>Loop with no separator between JSON objects.</td><td><span class="prod">BX</span>response (NB/MTA)</td><td>RAD-BX-17</td><td><span class="sev sev-hi">High</span></td></tr><tr><td><code>P-FILTER-IN-IF</code></td><td>A filter inside an if condition, which DotLiquid ignores (truthiness only).</td><td><span class="prod">BX</span>renewal request</td><td>RAD-BX-13</td><td><span class="sev sev-med">Medium</span></td></tr><tr><td><code>P-NO-ELSE</code></td><td>A branch chain with no else, so unexpected values drop data silently.</td><td><span class="prod">BX</span>renewal request</td><td>RAD-BX-16</td><td><span class="sev sev-med">Medium</span></td></tr><tr><td><code>P-NAME-MISMATCH</code></td><td>Output key name differs from the attribute the consumer stores.</td><td><span class="prod">BX</span>renewal response</td><td>RAD-BX-20</td><td><span class="sev sev-med">Medium</span></td></tr><tr><td><code>P-SOURCE-VALUE</code></td><td>Template correct; the source payload carries a questionable value.</td><td><span class="prod">LB</span>request</td><td>RAD-LB-11</td><td><span class="sev sev-med">Medium</span></td></tr><tr><td><code>P-FIELD-REMOVED</code></td><td>Output removed between sibling versions without a recorded reason.</td><td><span class="prod">BX</span>request (NB/MTA)</td><td>RAD-BX-22</td><td><span class="sev sev-low">Low</span></td></tr></tbody></table></div>
+</section>
+<p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="onesided"><h2>One-sided fixes</h2>
+<div class="scroll"><table class="t"><thead><tr><th>ID</th><th>Topic</th><th>Product that needs the change</th></tr></thead><tbody><tr><td><span class="badge">RAD-X-01</span></td><td>Agent: LB reads the field that exists; BX does not.</td><td>BX</td></tr><tr><td><span class="badge">RAD-X-02</span></td><td>Commission rate: sent by LB, never by BX.</td><td>BX</td></tr><tr><td><span class="badge">RAD-X-04</span></td><td>Root fields: LB and the BX renewal request follow RN-008/RN-011; the BX NB/MTA request does not.</td><td>BX</td></tr><tr><td><span class="badge">RAD-X-09</span></td><td>Work-area separators: LB and the BX renewal response have them, the BX NB/MTA response does not.</td><td>BX</td></tr></tbody></table></div>
+</section>
+<p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="order"><h2>Remediation order</h2>
+<ol class="plain"><li><b>Before any change:</b> host tests HT-W3-1 (whitespace) and HT-W3-2 (base64 decode); answer CQ-1 (which BX templates are live).</li><li><b>Next versions, all products:</b> F1 separator pattern, F2 JSON escaping (after the W2a D1 decision), F3 numeric defaults, F10 capstones/trades, F9 size tests.</li><li><b>Next BX request versions, with Pricing sign-off:</b> F4 amended excesses, F5 commission rate, F6 agent, F7 file key, F12 BI months type.</li><li><b>After owner answers:</b> F8 work areas (CQ-7), F11 claims IDs (CQ-4), F13 period ID (CQ-14), F15 response key names and types (CQ-3), F16 sync or retire the stale BX pair, F18 LB trade gate.</li></ol>
+</section>
+<p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="owners"><h2>Open questions by owner</h2>
+<div class="scroll"><table class="t"><thead><tr><th>Owner</th><th>Questions</th><th>Findings</th></tr></thead><tbody><tr><td>Integration / Pricing</td><td><b>CQ-1</b> Which BX request and response templates run for NB and MTA? Is <code>CompleteComputersRequest</code> 1.0.0.3 / <code>CompleteComputersResponse</code> 1.0.0.0 still deployed?</td><td>RAD-BX-21, RAD-BX-17</td></tr><tr><td>Pricing (Radar)</td><td><b>CQ-2</b> Does Radar use <code>CommissionRate</code> in the request?<br><b>CQ-3</b> Expected JSON types: <code>ExcessValue</code>, <code>TransactionSequence</code>, <code>CoverageRatingNoteValue</code> (sent as strings in requests), renewal target ratio.<br><b>CQ-4</b> Claims key: <code>ClaimClassCode</code> (hand-over AC7) or <code>ClassCode</code> (templates)? Source of <code>InsuredInterestID</code> for declared claims: the payload attribute <code>IN_Radar_Instanda</code> (empty on all samples) or <code>IN_Radar_InsuredInterestID</code> (hand-over AC5)?<br><b>CQ-5</b> Is <code>"string"</code> accepted for <code>MasterSetId</code>/<code>MasterSetRevision</code>? Should LB send them?<br><b>CQ-12</b> Were the ERisks and BI questions removed from the renewal request on purpose?<br><b>CQ-13</b> Does LB need the floating-entity work areas from the response?</td><td>RAD-BX-05<br>RAD-X-03, RAD-X-06, RAD-X-10<br>RAD-BX-12, RAD-LB-09<br>RAD-X-05<br>RAD-BX-22<br>RAD-X-12</td></tr><tr><td>Instanda config / Pricing</td><td><b>CQ-6</b> Which attributes carry the renewal and commercial adjustment flags on a renewal payload? Is <code>-100</code> a "no adjustment" value?<br><b>CQ-8</b> Why does the LB MTA MF78Z3 carry <code>IN_Radar_KeyName = smc_uk</code>?</td><td>RAD-BX-10<br>RAD-LB-11</td></tr><tr><td>Instanda config</td><td><b>CQ-7</b> Names of the floating and location work-area attributes the request should read.</td><td>RAD-BX-09</td></tr><tr><td>Pricing (Radar) / BA</td><td><b>CQ-9</b> Does LB support premium adjustments?</td><td>RAD-LB-07</td></tr><tr><td>BA</td><td><b>CQ-10</b> Does RN-003 (Claims History API merge) apply to LB and to BX NB/MTA?</td><td>RAD-X-07</td></tr><tr><td>Integration</td><td><b>CQ-11</b> Where should <code>QuoteSubID</code> come from in the response?</td><td>RAD-BX-23, RAD-LB-12</td></tr><tr><td>Integration (Function App)</td><td><b>CQ-14</b> Document the pre-render steps: base64 decode (fields, target shape), <code>policyPeriods</code> assembly and order, who sets <code>IN_Radar_PolicyPeriodId</code>, <code>requestTimestamp</code>.</td><td>RAD-BX-02, RAD-LB-03, RAD-BX-16</td></tr></tbody></table></div>
+</section>
+<p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="perf"><h2>Carried to Round 2 (perf-candidate)</h2>
+<div class="scroll"><table class="t"><thead><tr><th>Template</th><th>Reason</th></tr></thead><tbody><tr><td>bx-req / bx-rreq</td><td>Capture plus marker removal inside the premises loop (perils, excesses per premise) and the peril-enrichment loop nested in it.</td></tr><tr><td>bx-resp / bx-rresp</td><td>The whole Premises block is captured then string-replaced.</td></tr></tbody></table></div>
+</section>
+<p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="decisions"><h2>Decisions and limits</h2>
+<ul class="plain"><li><b>Performance is out of scope for this report.</b> 2 items are carried to the performance round (tagged <code>perf-candidate</code>): <code>bx-req / bx-rreq</code>: Capture plus marker removal inside the premises loop (perils, excesses per premise) and the peril-enrichment loop nested in it.</li><li><b>Host configuration.</b> DotLiquid version, syntax level, naming convention, culture, time zone and the pre-render steps (base64 decode, <code>policyPeriods</code> assembly) on the Function App are not confirmed. Findings marked Verify depend on them; the recommended fixes work under any setting except where the Risk column says otherwise.</li><li><b>Engine difference.</b> The level-20 whitespace result (RAD-BX-01, RAD-LB-01) was produced on DotLiquid 2.3.260; Programme Reference v12 §13.4 recorded different tag trimming on the work-system build. Run HT-W3-1 before treating it as a production risk.</li><li><b>Samples not available.</b> No raw Radar response for either product (responses were reconstructed from stored outputs); no real LB renewal (not live); no payload with an amended flood, storm, escape-of-water or breakdown excess; no LB contract. Affected findings are marked VALIDATE.</li><li><b>Not reviewed.</b> Upstream Layer-2 items PRE_7200 and PRC-04 (need a production input/output pair); the 20.11 request-pair report findings RQ/RR/RO, held on the work system (aliases mapped where known).</li></ul><h3>Host tests to add</h3><div class="scroll"><table class="t"><thead><tr><th>#</th><th>Test</th><th>Settles</th></tr></thead><tbody><tr><td><code>HT-W3-1</code></td><td>Render <code>A,{%- if true -%}</code>⏎<code>    ##M##</code> and check the output is <code>A,##M##</code>.</td><td>RAD-BX-01, RAD-LB-01 (and DC-LB-55)</td></tr><tr><td><code>HT-W3-2</code></td><td>Log one request input after the pre-render step: are <code>…WorkAreas</code> arrays and <code>OUT_PE_PerilDataString</code> an object?</td><td>RAD-BX-02, RAD-LB-03, RAD-BX-08</td></tr><tr><td><code>HT-W3-3</code></td><td><code>{% for i in obj %}{{ i.Key }}|{{ i.key }};{% endfor %}</code> on a decoded object.</td><td>RAD-BX-08</td></tr><tr><td><code>HT-W3-4</code></td><td><code>{% for e in list %}{% if e == 1 %}{% continue %}{% endif %}{{ e }}{% endfor %}</code>.</td><td>RAD-BX-25 (April report claim)</td></tr><tr><td><code>HT-W3-5</code></td><td><code>{% if empty_array | size &gt; 0 %}T{% else %}F{% endif %}</code>.</td><td>RAD-BX-13</td></tr><tr><td><code>HT-5 (v12)</code></td><td>Bare <code>.size</code> on an absent array.</td><td>RAD-BX-14, RAD-LB-10</td></tr></tbody></table></div>
+</section>
+
+<p class="spacer" aria-hidden="true">&nbsp;</p><section class="sec" id="files"><h2>Files</h2><p class="small">BX <code>CompleteComputersRequest.liquid</code> 1.0.0.3<br>BX <code>CompleteComputersRenewalRequest.liquid</code> 1.0.0.4<br>BX <code>CompleteComputersResponse.liquid</code> 1.0.0.0<br>BX <code>CompleteComputersRenewalResponse.liquid</code> 1.0.0.3<br>LB <code>CompleteDirectorsAndOfficersRequest.liquid</code> 1.0.0.3<br>LB <code>CompleteDirectorsAndOfficersResponse.liquid</code> 1.0.0</p></section>
+</main></body></html>
