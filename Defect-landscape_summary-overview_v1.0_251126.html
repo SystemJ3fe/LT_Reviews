@@ -1,0 +1,138 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Defect landscape: summary overview</title><style>:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#1b2230; --muted:#5a6475; --rule:#d8dde6; --accent:#0b5f73; --accent-bg:#e1f0f4;
+  --del-bg:#fde8ea; --del-ink:#6e1620; --add-bg:#e2f4e5; --add-ink:#14502a; --none-bg:#eef0f4; --hunk-bg:#eaf1f4; --eq-ink:#2c3544;
+  --warn-bg:#fff4dd; --warn-rule:#e3c47a; --warn-ink:#8a5a00;
+  --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#12161d; --panel:#1a202a; --ink:#e6eaf1; --muted:#9aa5b8; --rule:#2c3543; --accent:#6cc4d8; --accent-bg:#17323a;
+    --del-bg:#3a1b21; --del-ink:#ffc9cf; --add-bg:#16301f; --add-ink:#bdecc9; --none-bg:#1f2632; --hunk-bg:#1b2a31; --eq-ink:#c8d0de;
+    --warn-bg:#35290f; --warn-rule:#7a6322; --warn-ink:#f0c674; color-scheme: dark; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+main{max-width:1280px;margin:0 auto;padding:28px 20px 64px}
+h1{font-size:1.55rem;line-height:1.25;margin:0 0 6px;font-weight:650}
+h2{font-size:1.1rem;margin:34px 0 10px;font-weight:650}
+h3{font-size:1rem;margin:24px 0 8px;font-weight:650}
+p{margin:0 0 10px;max-width:78ch}
+a{color:var(--accent)}
+.sub{color:var(--muted);max-width:78ch}
+.small{font-size:.88rem;color:var(--muted)}
+code{font-family:var(--mono);font-size:.88em;background:var(--accent-bg);padding:1px 5px;border-radius:3px}
+.scroll{overflow-x:auto}
+ul.plain{margin:0;padding-left:20px;max-width:100ch} ul.plain li{margin:6px 0}
+ol.plain{margin:0;padding-left:22px;max-width:100ch} ol.plain li{margin:6px 0}
+
+/* header block */
+table.docinfo{border-collapse:collapse;width:100%;max-width:1000px;background:var(--panel);border:1px solid var(--rule);margin:14px 0 8px}
+table.docinfo th{width:150px;text-align:left;vertical-align:top;font-weight:650;color:var(--muted);padding:7px 12px;border-bottom:1px solid var(--rule);background:var(--bg)}
+table.docinfo td{padding:7px 12px;border-bottom:1px solid var(--rule)}
+table.docinfo tr:last-child th,table.docinfo tr:last-child td{border-bottom:0}
+
+/* stat strip, callout, badge */
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0 4px}
+.stat{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:10px 16px;min-width:150px}
+.stat b{display:block;font-size:1.35rem;font-weight:650}
+.stat span{color:var(--muted);font-size:.85rem}
+.note{background:var(--warn-bg);border:1px solid var(--warn-rule);border-radius:6px;padding:10px 14px;margin:18px 0;max-width:100ch}
+.badge{display:inline-block;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:0 7px;margin-right:6px;font-size:.8rem;font-weight:600;white-space:nowrap}
+
+/* register and figures tables */
+table.t{border-collapse:collapse;width:100%;background:var(--panel);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+table.t th{text-align:left;font-weight:600;font-size:.85rem;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--rule);background:var(--bg)}
+table.t td{padding:8px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+table.t tr:last-child td{border-bottom:0}
+table.t td:nth-child(n+3){font-variant-numeric:tabular-nums}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.pf th{text-align:center} table.pf th:first-child{text-align:left}
+tr.tot td{border-top:2px solid var(--rule);background:var(--bg)}
+.gd{color:var(--add-ink);font-weight:650} .nn{color:var(--muted)}
+
+/* diff */
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--rule)}
+.bar button{font:inherit;font-size:.85rem;border:1px solid var(--rule);background:var(--panel);color:var(--ink);padding:5px 12px;border-radius:5px;cursor:pointer}
+.bar button:hover{border-color:var(--accent)}
+.legend span{display:inline-block;padding:1px 8px;border-radius:3px;font-size:.82rem;margin-right:8px}
+.l-del{background:var(--del-bg);color:var(--del-ink)} .l-add{background:var(--add-bg);color:var(--add-ink)}
+table.diff{border-collapse:collapse;width:100%;table-layout:fixed;background:var(--panel);border:1px solid var(--rule);font:12.5px/1.45 var(--mono)}
+table.diff col.cn{width:3.6em}
+td.ln{color:var(--muted);text-align:right;padding:0 8px;user-select:none;vertical-align:top;border-right:1px solid var(--rule);font-size:11.5px}
+td.code{white-space:pre-wrap;overflow-wrap:anywhere;tab-size:4;padding:0 8px;vertical-align:top;color:var(--eq-ink);border-right:1px solid var(--rule)}
+td.code.del{background:var(--del-bg);color:var(--del-ink)} td.code.add{background:var(--add-bg);color:var(--add-ink)} td.code.none{background:var(--none-bg)}
+tr.hunk td{background:var(--hunk-bg);font:600 12.5px var(--sans);padding:6px 10px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+tr.hunk .htext{font-weight:500;margin-right:12px}
+tr.hunk .rng{color:var(--muted);font-weight:400;font-family:var(--mono);font-size:11.5px}
+tr.fold td{background:var(--bg);text-align:center;padding:3px}
+tr.fold button{font:12px var(--sans);color:var(--accent);background:none;border:0;cursor:pointer;padding:2px 8px}
+tr.hid{display:none} tr.hid.open{display:table-row}
+
+/* section spacer: separates sections so the end of one and the start of the next are easy to see */
+p.spacer{margin:0;height:34px;max-width:none;border-bottom:1px solid var(--rule)}
+section.sec{display:block}
+section.sec > h2:first-child{margin-top:22px}
+
+/* performance block on a change header (only when an effect is flagged) */
+.perf{margin-top:7px;font:400 12.5px/1.45 var(--sans)}
+.perf .lead{font-weight:650;margin:0 0 4px;max-width:100ch;font-size:13px}
+.perf .tag{display:inline-block;border:1px dashed var(--muted);color:var(--muted);border-radius:4px;padding:0 6px;font-size:11px;font-weight:500;margin-left:6px}
+table.pt{border-collapse:collapse;font:12px/1.4 var(--sans);margin:2px 0 0}
+table.pt th{font-weight:600;color:var(--muted);text-align:left;padding:2px 18px 2px 0;white-space:nowrap}
+table.pt td{padding:2px 18px 2px 0;white-space:nowrap;font-weight:500}
+.pt .good{color:var(--add-ink);font-weight:650}
+.pt .warn{color:var(--warn-ink);font-weight:650}
+.pt .none{color:var(--muted)}
+
+:root{ --sev-hi-bg:#fbe3e3; --sev-hi-ink:#8a1111; }
+@media (prefers-color-scheme: dark){ :root{ --sev-hi-bg:#3d1515; --sev-hi-ink:#ffb4b4; } }
+
+/* severity and classification badges (text always present) */
+.sev{display:inline-block;border-radius:4px;padding:0 7px;font-size:.8rem;font-weight:650;white-space:nowrap;border:1px solid transparent}
+.sev-hi{background:var(--sev-hi-bg);color:var(--sev-hi-ink);border-color:var(--sev-hi-ink)}
+.sev-med{background:var(--warn-bg);color:var(--warn-ink);border-color:var(--warn-rule)}
+.sev-low{background:var(--none-bg);color:var(--muted);border-color:var(--rule)}
+.cls{display:inline-block;border-radius:4px;padding:0 6px;font-size:.76rem;font-weight:600;white-space:nowrap;border:1px solid var(--rule);color:var(--muted)}
+.cls-ok{color:var(--muted)}
+.cls-warn{background:var(--warn-bg);color:var(--warn-ink);border-color:var(--warn-rule)}
+.cls-issue{color:var(--accent);border-color:var(--accent)}
+.cls-val{border-style:dashed;color:var(--muted)}
+.was{font-size:.78rem;color:var(--muted);display:block}
+
+/* product label used in section headings and registers */
+.prod{display:inline-block;font:600 .78rem var(--mono);border:1px solid var(--rule);border-radius:3px;padding:0 5px;margin-right:6px;color:var(--ink)}
+
+/* feature matrix (rewrite pairs) */
+table.fm{border-collapse:collapse;width:100%;background:var(--panel);border:1px solid var(--rule);font-size:.88rem}
+table.fm th,table.fm td{padding:6px 10px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);vertical-align:top;text-align:left}
+table.fm th{background:var(--bg);color:var(--muted);font-weight:600}
+table.fm td.same{color:var(--muted)}
+table.fm td.diff{background:var(--warn-bg);color:var(--warn-ink)}
+table.fm td.na{color:var(--muted);font-style:italic}
+
+/* register summary line */
+p.regsum{font-weight:600;max-width:100ch}
+</style></head><body><main>
+<h1>Defect landscape: summary overview</h1><p class="sub">All defect counts across the cross-product liquid audit to 25.11.2026: BX (Complete Computers) and LB (Complete D&amp;O).</p><p class="small"><a href="#plain">In plain terms</a> · <a href="#current">Current code</a> · <a href="#legacy">Earlier reports</a> · <a href="#patterns">Patterns</a></p>
+<table class="docinfo"><tr><th>Document</th><td>Defect landscape: high-level count summary across all liquid audit reports to date</td></tr><tr><th>Author</th><td>Jeff Watson — Allianz UK</td></tr><tr><th>Purpose</th><td>One view of every defect count across the local and work-system audit reports, so the whole landscape can be seen at once.</td></tr><tr><th>Audience</th><td>Jeff (PM); Principal Engineers and owners for context</td></tr><tr><th>Status</th><td>Draft — 25.11.2026. Counts as at this date. AI-assisted: review before quoting.</td></tr><tr><th>Version/Date</th><td>v1.0_251126</td></tr></table>
+<div class="stats"><div class="stat"><b>186 defects</b><span>in the current code, five rated reports (raw sum)</span></div><div class="stat"><b>0 Critical/Blocking</b><span>in the current code</span></div><div class="stat"><b>29 High</b><span>W3 8, W2a 7, W2b 6, AOMS 5, ABS 3</span></div><div class="stat"><b>75 provisional</b><span>W2b and W3: independent check (Mode E) not yet run</span></div><div class="stat"><b>74 of 103</b><span>AOMS May defects closed</span></div><div class="stat"><b>6 of 19</b><span>Radar May defects closed</span></div></div><div class="note"><b>How to read the counts.</b> Each count is taken from that report's own register. W3 and W2b are read live from their findings files; the other counts come from each report's summary table. <b>The totals are not de-duplicated.</b> Some AOMS N-items were carried into W2a, and W3 absorbed some May Radar and 20.11 request-pair items, so the 186 is a raw sum, not a unique count. The W2a and W2b figures come from Programme Reference v12 and the W2b findings file. The 20.11 Radar request-pair and D&amp;O ABS v1.3 figures come from v12's evidence digest; those reports are held on the work system only. Severity is business and pricing impact, not fix size. AI-assisted: review before quoting.</div><p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="plain"><h2>In plain terms</h2>
+<p><b>In plain terms:</b> across the five rated audits of the current code there are <b>186 defects, none Critical or Blocking and 29 High</b>. In W2a, W2b and W3, BX carries 92 and LB 63. 75 of them (W2b and W3) are still provisional until the independent check has run; W2a has been checked. Proposed next versions exist for W2a (22), W2b (11) and ABS (1). Radar has none yet: it waits on 14 contract questions. <b>Of the earlier reports, AOMS is mostly fixed (74 of 103 closed), Radar mostly is not (6 of 19 closed)</b>, and the NB/MTA Radar templates have had no defect fixes since May.</p>
+</section>
+<p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="current"><h2>Defects in the current code</h2>
+<div class="scroll"><table class="t"><thead><tr><th>Wave / report</th><th>Where, date</th><th>Scope</th><th>Findings</th><th>By product</th><th>Crit / Block</th><th>High</th><th>Medium</th><th>Low</th><th>Also raised</th><th>State</th></tr></thead><tbody><tr><td><b>W2a</b> Docs &amp; Comms (emails, document routing, cancellation, claims experience)</td><td>Work system, 24.11.2026</td><td>23 templates (BX 14, LB 9)</td><td><b>80</b></td><td>BX 44, LB 36</td><td><span class="num">0</span></td><td><span class="num">7</span></td><td><span class="num">41</span></td><td><span class="num">32</span></td><td>—</td><td>Mode E done: 60 confirmed, 14 adjusted, 6 unverified, 0 withdrawn. 22 proposed versions</td></tr><tr><td><b>W2b</b> Docs &amp; Comms schedules</td><td>Work system, 25.11.2026</td><td>11 templates (BX 7, LB 4)</td><td><b>37</b></td><td>BX 23, LB 14</td><td><span class="num">0</span></td><td><span class="num">6</span></td><td><span class="num">14</span></td><td><span class="num">17</span></td><td>15 drift, 19 schema questions</td><td>Mode E not run. 11 proposed versions</td></tr><tr><td><b>W3</b> Radar request and response</td><td>Local, 25.11.2026</td><td>6 templates (BX 4, LB 2)</td><td><b>38</b></td><td>BX 25, LB 13</td><td><span class="num">0</span></td><td><span class="num">8</span></td><td><span class="num">22</span></td><td><span class="num">8</span></td><td>13 drift, 14 contract questions, 6 host tests</td><td>Mode E not run. No proposed versions yet (fix report after decisions)</td></tr><tr><td><b>AOMS BX</b> new defects in current code (N1–N22)</td><td>Local, 19.11.2026</td><td>BX Docs &amp; Comms</td><td><b>22</b></td><td>BX 22</td><td><span class="num">0</span></td><td><span class="num">5</span></td><td><span class="num">8</span></td><td><span class="num">9</span></td><td>—</td><td>Partly carried into W2a (N5, N7, N12, N13, N22 appear there)</td></tr><tr><td><b>ABS booking</b>, second pass</td><td>Local, 19.11.2026</td><td>BX and LB policy booking</td><td><b>9</b></td><td>shared</td><td><span class="num">0</span></td><td><span class="num">3</span></td><td><span class="num">3</span></td><td><span class="num">3</span></td><td>8 carried (B1–B10), 1 superseded (B11)</td><td>Fix forward. One proposed version (1.0.0.4)</td></tr><tr><td><b>Total (rated reports, not de-duplicated)</b></td><td></td><td></td><td><b>186</b></td><td>BX 92, LB 63 (W2a, W2b, W3)</td><td><b>0</b></td><td><b>29</b></td><td><b>88</b></td><td><b>69</b></td><td></td><td></td></tr></tbody></table></div><h3>Other findings (not severity-rated)</h3><div class="scroll"><table class="t"><thead><tr><th>Report</th><th>Where, date</th><th>Scope</th><th>Items</th><th>Note</th></tr></thead><tbody><tr><td><b>ABS policy</b></td><td>Local, 14.11.2026</td><td>BX and LB policy</td><td>11 (P1–P11)</td><td>Classified by drift code, not severity; 2 resolved</td></tr><tr><td><b>Sparta, MDM, Salesforce</b></td><td>Local, 14.11.2026</td><td>Quick check (expected identical)</td><td>SF-1 to SF-5</td><td>One genuine drift (Salesforce date attributes, product configuration); SF-4 is a decision for Jeff</td></tr></tbody></table></div>
+</section>
+<p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="legacy"><h2>Earlier defect reports: status in the current release</h2>
+<div class="scroll"><table class="t"><thead><tr><th>Earlier reports</th><th>Re-checked</th><th>Items</th><th>Fixed / closed</th><th>Partly fixed</th><th>Still open</th><th>Not reproduced on DotLiquid</th><th>Need host evidence</th><th>Other</th></tr></thead><tbody><tr><td><b>AOMS May 2026</b> (root-cause analysis, schedule validation v2, email code quality)</td><td>Local, 19.11.2026</td><td><b>103</b></td><td>54 fixed, 13 moot (validation removed), 7 resolved by decision</td><td><span class="num">18</span></td><td>6</td><td>3</td><td>—</td><td>2 not applicable</td></tr><tr><td><b>Radar May 2026</b> (Pricing Defects v2, defect lineage)</td><td>Local, 25.11.2026</td><td><b>19</b></td><td>6 (2 resolved, 3 with a residual defect, 1 recommendation done)</td><td><span class="num">2</span></td><td>7 (4 unchanged, 1 fix not effective, 2 to validate)</td><td>—</td><td>4</td><td>—</td></tr><tr><td><b>Radar request-pair report</b> (20.11.2026): 1 Blocking, 7 High, 13 Medium, 4 Low</td><td>Work system only</td><td><b>25</b></td><td>Reconciled into W3 where the IDs are known</td><td><span class="num">—</span></td><td>—</td><td>—</td><td>—</td><td>Full reconciliation at Mode E</td></tr><tr><td><b>D&amp;O ABS report v1.3</b>: 3 Blocking, 8 High, 10 Medium, 7 Low</td><td>Work system only</td><td><b>28</b></td><td>Carried into the ABS booking passes and Round 2</td><td><span class="num">—</span></td><td>—</td><td>—</td><td>—</td><td>—</td></tr></tbody></table></div>
+</section>
+<p class="spacer" aria-hidden="true">&nbsp;</p>
+<section class="sec" id="patterns"><h2>Repeated patterns across the landscape</h2>
+<ul class="plain"><li><b>Text not escaped</b> (JSON or XML): W2a, W2b, W3, AOMS.</li><li><b>Unquoted numbers with no default</b> (a missing value breaks the output): W3, ABS, AOMS, Radar May.</li><li><b>Syntax-level whitespace dependence</b> (valid output only at DotLiquid level 22): W2b (LB schedules), W3 (all Radar requests). Host test HT-W3-1.</li><li><b><code>hh</code> 12-hour times</b>: W2a, ABS.</li><li><b>Gates or reads on attributes that do not exist</b> (silent data loss): W3 (amended excesses, commission rate, agent, flats), W2b, ABS.</li></ul><p class="small">One agreed fix per pattern, applied across both products as the next version of each template, closes a large share of the total.</p>
+</section>
+
+<p class="spacer" aria-hidden="true">&nbsp;</p><section class="sec" id="files"><h2>Sources</h2><p class="small">W3: <code>_reference/findings/W3.json</code>; reports <code>Radar-request_…</code>, <code>Radar-response_…</code>, <code>Radar-W3_summary-overview_…</code><br>W2b: <code>Alt_Sys_Outputs/W2b_findings_v1_1_251126.json</code>; W2a: <code>Alt_Sys_Outputs/Liquid_Programme_Reference_v12_251126.md</code> §12.1 and <code>DC-W2a_code-audit_v1_1_241126</code><br>AOMS: <code>_reference/findings/AOMS-BX-defect-resolution-review-1.1.md</code> §1; ABS: <code>_reference/findings/ABS.md</code>, <code>ABS-booking-pass2.md</code>; Sparta/MDM/Salesforce: <code>_reference/findings/00-Sparta-MDM-Salesforce.md</code><br>Radar May: <code>_reference/reports/Radar-BX_legacy-defect-status_v1.0_251126.html</code>; work-system-only reports: Programme Reference v12 §7</p></section>
+</main></body></html>
